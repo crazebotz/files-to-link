@@ -24,8 +24,8 @@ pass_db = Database(Var.DATABASE_URL, "ag_passwords")
 async def login_handler(c: Client, m: Message):
     try:
         try:
-            ag = await m.reply_text("Now send me password.\n\n If You don't know check the MY_PASS Variable in heroku \n\n(You can use /cancel command to cancel the process)")
-            _text = await c.listen(m.from_chat.id, filters=filters.text, timeout=90)
+            ag = await m.reply_text("Now send me password.\n\n If You don't know check the MY_PASS Variable in Heroku \n\n(You can use /cancel command to cancel the process)")
+            _text = await c.listen(m.from_user.id, filters=filters.text, timeout=90)
             if _text.text:
                 textp = _text.text
                 if textp == "/cancel":
@@ -37,7 +37,7 @@ async def login_handler(c: Client, m: Message):
             await ag.edit("I can't wait more for password, try again")
             return
         if textp == MY_PASS:
-            await pass_db.add_user_pass(m.from_chat.id, textp)
+            await pass_db.add_user_pass(m.from_user.id, textp)
             ag_text = "Yeah! you entered the password correctly"
         else:
             ag_text = "Wrong password, try again"
