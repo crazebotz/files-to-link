@@ -118,13 +118,13 @@ async def private_receive_handler(c: Client, m: Message):
 @StreamBot.on_message(filters.channel & ~filters.group & (filters.document | filters.video | filters.photo)  & ~filters.forwarded, group=-1)
 async def channel_receive_handler(bot, broadcast):
     if MY_PASS:
-        check_pass = await pass_db.get_user_pass(broadcast.chat.id)
+        check_pass = await pass_db.get_user_pass(broadcast.from_user.id)
         if check_pass == None:
             await broadcast.reply_text("Login first using /login cmd \n don\'t know the pass? request it from developer!")
             return
         if check_pass != MY_PASS:
             await broadcast.reply_text("Wrong password, login again")
-            await pass_db.delete_user(broadcast.chat.id)
+            await pass_db.delete_user(broadcast.from_user.id)
             
             return
     if int(broadcast.chat.id) in Var.BANNED_CHANNELS:
